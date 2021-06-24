@@ -74,13 +74,23 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for (let i = board.length-1; i > 0; i--) {
+    if (board[i][x] === null){
+      return i
+    }
+  }
+  return -1;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  let gamePiece = document.createElement("div")
+  gamePiece.className("")
+  let xAxis = findSpotForCol(x);
+  let spot = document.getElementById(`${y}-${xAxis}`)
+  spot.appendChild(gamePiece);
 }
 
 /** endGame: announce game end */
