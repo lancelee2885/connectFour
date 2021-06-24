@@ -17,14 +17,12 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
-function makeBoard() {
-  let row = [];
-
-  for (let i = 0; i < WIDTH; i++) {
-    row.push(null);
-  }
-
+function makeBoard() { // make this nested
   for (let i = 0; i < HEIGHT; i++) {
+    let row = [];
+    for (let j = 0; j < WIDTH; j++) {
+      row.push(null);
+    }
     board.push(row);
   }
 }
@@ -63,7 +61,7 @@ function makeHtmlBoard() {
       let cell = document.createElement("td");
       // TODO: add an id, y-x, to the above table cell element
       // you'll use this later, so make sure you use y-x
-      cell.setAttribute("id", "y-x");
+      cell.setAttribute("id", `${y}-${x}`);
       // TODO: append the table cell to the table row
       row.append(cell);
     }
