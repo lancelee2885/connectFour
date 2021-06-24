@@ -74,22 +74,24 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  for (let i = board.length-1; i > 0; i--) {
-    if (board[i][x] === null){
+  for (let i = board.length-1; i >= 0; i--) {
+    if (board[i][x] === null ){
       return i
-    }
+    } 
   }
-  return -1;
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
-  let gamePiece = document.createElement("div")
-  gamePiece.className("")
-  let xAxis = findSpotForCol(x);
-  let spot = document.getElementById(`${y}-${xAxis}`)
+
+  let gamePiece = document.createElement("div");
+  gamePiece.classList.add(`player${currPlayer}`, "piece");
+  //let yRow = findSpotForCol(x);
+  let spot = document.getElementById(`${y}-${x}`);
+  //let spot = document.getElementById(`${y}`)
   spot.appendChild(gamePiece);
 }
 
@@ -113,7 +115,9 @@ function handleClick(evt) {
 
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
+  board[y][x] = currPlayer;
   placeInTable(y, x);
+
 
   // check for win
   if (checkForWin()) {
@@ -122,9 +126,25 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
+  for (let row of board) {
+    let fullBoard = row.every(function (element) {
+      return element !== null;
+    })
+
+    if (fullBoard) {
+      endGame(`Tie`);
+    }
+  }
+
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  // if (currPlayer === 1){
+  //   currPlayer = 2;
+  // } else {
+  //   currPlayer = 1;
+  // }
+  currPlayer = (currPlayer === 1) ?  2 :  1
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -137,10 +157,30 @@ function checkForWin() {
    * currPlayer
    */
   function _win(cells) {
+    // TODO: Check four cells to see if they're all legal & all color of current player
+    let comparisonArr = [];
 
-    // TODO: Check four cells to see if they're all legal & all color of current
-    // player
+    for (let cell of cells) {
+      for (let i = 0; i < cell.length; i++) {
+        
+        let piece = document.getElementById(`${cell[0]}-${cell[1]}`)
+        console.log("place" + piece);
+        let playerPiece = piece.classList[0]
+        
+        comparisonArr.push(playerPiece)
 
+        if (!(cell[0] >= 0 && cell[0] < 6)) {
+
+          return false;
+        }
+        if (!(cell[1] >= 0 && cell[1] < 7)) {
+
+          return false;
+        }
+      }
+       
+    }
+    return true;
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
@@ -154,9 +194,9 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      let diagDL = [[y, x], [y - 1, x - 1], [y - 2, x - 2], [y - 3, x - 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
@@ -168,3 +208,4 @@ function checkForWin() {
 
 makeBoard();
 makeHtmlBoard();
+
