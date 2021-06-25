@@ -18,9 +18,9 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() { // make this nested
-  for (let i = 0; i < HEIGHT; i++) {
+  for (let y = 0; y < HEIGHT; y++) {
     let row = [];
-    for (let j = 0; j < WIDTH; j++) {
+    for (let x = 0; x < WIDTH; x++) {
       row.push(null);
     }
     board.push(row);
@@ -74,9 +74,9 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  for (let i = board.length-1; i >= 0; i--) {
-    if (board[i][x] === null ){
-      return i
+  for (let y = board.length-1; y >= 0; y--) {
+    if (board[y][x] === null ){
+      return y;
     } 
   }
   return null;
@@ -99,6 +99,7 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -126,12 +127,13 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
+  // Check only for the top row
   for (let row of board) {
-    let fullBoard = row.every(function (element) {
+    let fullRow = row.every(function (element) {
       return element !== null;
     })
 
-    if (fullBoard) {
+    if (fullRow) {
       endGame(`Tie`);
     }
   }
@@ -144,7 +146,7 @@ function handleClick(evt) {
   // } else {
   //   currPlayer = 1;
   // }
-  currPlayer = (currPlayer === 1) ?  2 :  1
+  currPlayer = (currPlayer === 1) ?  2 :  1;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
@@ -158,29 +160,34 @@ function checkForWin() {
    */
   function _win(cells) {
     // TODO: Check four cells to see if they're all legal & all color of current player
-    let comparisonArr = [];
 
     for (let cell of cells) {
       for (let i = 0; i < cell.length; i++) {
-        
-        let piece = document.getElementById(`${cell[0]}-${cell[1]}`)
-        console.log("place" + piece);
-        let playerPiece = piece.classList[0]
-        
-        comparisonArr.push(playerPiece)
 
         if (!(cell[0] >= 0 && cell[0] < 6)) {
-
           return false;
         }
         if (!(cell[1] >= 0 && cell[1] < 7)) {
-
           return false;
         }
-      }
-       
+        
+        if (board[cell[0]][cell[1]] !== currPlayer){
+          return false;
+        }
+
+        
+      } 
     }
     return true;
+    
+      //   return cells.every(
+      // function([y, x]){
+      //   y >= 0 &&
+      //   y < HEIGHT &&
+      //   x >= 0 &&
+      //   x < WIDTH &&
+      //   board[y][x] === currPlayer
+      // });
   }
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
