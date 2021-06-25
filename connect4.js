@@ -128,14 +128,21 @@ function handleClick(evt) {
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
   // Check only for the top row
-  for (let row of board) {
-    let fullRow = row.every(function (element) {
-      return element !== null;
-    })
+  // for (let row of board) {
+  //   let fullRow = row.every(function (element) {
+  //     return element !== null;
+  //   })
 
-    if (fullRow) {
-      endGame(`Tie`);
-    }
+  //   if (fullRow) {
+  //     endGame(`Tie`);
+  //   }
+  // }
+
+  let fullTopRow = board[0].every(function(ele){
+    return ele !== null;
+  })
+  if(fullTopRow){
+    return endGame(`Tie!`)
   }
 
 
@@ -164,6 +171,7 @@ function checkForWin() {
     for (let [y, x] of cells) {
       // let y = cell[0];
       // let x = cell[1];
+        
         if (!(y >= 0 && y < 6)) {
           return false;
         }
