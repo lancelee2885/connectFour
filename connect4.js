@@ -171,11 +171,10 @@ function checkForWin() {
     for (let [y, x] of cells) {
       // let y = cell[0];
       // let x = cell[1];
-        
-        if (!(y >= 0 && y < 6)) {
+        if (!(y >= 0 && y < HEIGHT)) {
           return false;
         }
-        if (!(x >= 0 && x < 7)) {
+        if (!(x >= 0 && x < WIDTH)) {
           return false;
         }
         if (board[y][x] !== currPlayer){
